@@ -2,7 +2,7 @@
 - hosts: all
   become: yes
   vars:
-    xmx_size: 512m
+    xmx_size: 612m
     xmx_perm_size: 256m
     tomcat_user: sagar
     tomcat_password: password
