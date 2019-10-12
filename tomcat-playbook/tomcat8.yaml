@@ -30,8 +30,9 @@
       - restart tomcat8
     - name: install additional packages
       package:
-        name: "{{ addition_packages }}"
+        name: "{{ item }}"
         state: present
+      loop: "{{ additional_packages }}"
     - name: copy tomcat file
       template:
         src: templates/tomcat-users.xml.j2
