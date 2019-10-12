@@ -1,0 +1,48 @@
+---
+- hosts: all
+  become: yes
+  vars:
+    xmx_size: 512m
+    xmx_perm_size: 256m
+    tomcat_user: sagar
+    tomcat_password: password
+    additional_packages: 
+      - tomcat8-docs 
+      - tomcat8-admin 
+      - tomcat8-examples
+      - git     
+  tasks:
+    - name: installing java
+      package: 
+        name: default-jdk
+        update_cache: yes
+        state: present
+    - name: install tomcat8
+      package:
+        name: tomcat8
+        state: present
+    - name: copy tomcat8 file
+      template:
+        src: templates/tomcat8.j2
+        dest: /etc/default/tomcat8
+        mode: 640
+      notify:
+      - restart tomcat8
+    - name: install additional packages
+      package:
+        name: "{{ addition_packages }}"
+        state: present
+    - name: copy tomcat file
+      template:
+        src: templates/tomcat-users.xml.j2
+        dest: /etc/tomcat8/tomcat-users.xml
+        mode: 0640
+      notify:
+      - restart tomcat8
+  handlers:
+    - name: restart tomcat8
+      service:
+        name: tomcat8
+        state: restarted
+
+       
